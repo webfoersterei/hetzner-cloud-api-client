@@ -16,12 +16,12 @@ interface ClientInterface
     /**
      * @return GetAllResponse
      */
-    public function actionGetAll(): GetAllResponse;
+    public function getActions(): GetAllResponse;
 
     /**
      * @param int $id
      * @return GetResponse
      */
-    public function actionGet($id): GetResponse;
+    public function getAction($id): GetResponse;
 
 }

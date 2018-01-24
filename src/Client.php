@@ -48,7 +48,7 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function actionGetAll(): GetAllResponse
+    public function getActions(): GetAllResponse
     {
         $this->logger->debug('Sending API-Request to get all actions');
 
@@ -66,7 +66,7 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function actionGet($id): GetResponse
+    public function getAction($id): GetResponse
     {
         $this->logger->debug('Sending API-Request to get a single action', ['action_id' => $id]);
 
