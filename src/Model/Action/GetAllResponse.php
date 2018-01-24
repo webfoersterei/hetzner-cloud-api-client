@@ -7,7 +7,9 @@
 namespace Webfoersterei\HetznerCloudApiClient\Model\Action;
 
 
-class GetAllResponse
+use Webfoersterei\HetznerCloudApiClient\Model\ErrorResponse;
+
+class GetAllResponse extends ErrorResponse
 {
 
     /**
