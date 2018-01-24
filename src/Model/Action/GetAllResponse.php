@@ -8,9 +8,11 @@ namespace Webfoersterei\HetznerCloudApiClient\Model\Action;
 
 
 use Webfoersterei\HetznerCloudApiClient\Model\ErrorResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\MetaResponseTrait;
 
 class GetAllResponse extends ErrorResponse
 {
+    use MetaResponseTrait;
 
     /**
      * @var Action[]|null
