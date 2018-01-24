@@ -9,7 +9,13 @@
             "email": "tfoerster@webfoersterei.de"
         }
     ],
-    "require": {},
+    "require": {
+        "psr/log": "^1.0",
+        "symfony/serializer": "^4.0",
+        "guzzlehttp/guzzle": "^6.3",
+        "symfony/property-access": "^4.0",
+        "symfony/property-info": "^4.0"
+    },
     "require-dev": {
         "phpunit/phpunit": "^6.5"
     },
