@@ -34,7 +34,7 @@ class ClientFactory
         return new Client($serializer, $httpClient);
     }
 
-    protected static function createSerializer()
+    protected static function createSerializer(): Serializer
     {
         $objectNormalizer = new ObjectNormalizer(null, null, null, new PhpDocExtractor());
         $normalizers = [new DateTimeNormalizer(), new ArrayDenormalizer(), $objectNormalizer];
