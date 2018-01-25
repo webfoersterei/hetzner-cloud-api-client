@@ -25,7 +25,7 @@ class ClientFactory
         $config = [
             'base_uri' => static::API_URL,
             'headers' =>
-                ['Authorization' => sprintf('%s %s', static::AUTH_TYPE, $apiKey)]
+                ['Authorization' => sprintf('%s %s', static::AUTH_TYPE, $apiKey)],
         ];
         $httpClient = new \GuzzleHttp\Client($config);
 
@@ -39,6 +39,7 @@ class ClientFactory
         $objectNormalizer = new ObjectNormalizer(null, null, null, new PhpDocExtractor());
         $normalizers = [new DateTimeNormalizer(), new ArrayDenormalizer(), $objectNormalizer];
         $encoders = [new JsonEncoder()];
+
         return new Serializer($normalizers, $encoders);
     }
 

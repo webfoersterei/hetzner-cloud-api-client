@@ -20,6 +20,7 @@ use Webfoersterei\HetznerCloudApiClient\Exception\ErrorResponseException;
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetAllResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\ErrorResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\GetAllResponse as GetAllServersResponse;
 
 class Client implements ClientInterface
 {
@@ -52,33 +53,42 @@ class Client implements ClientInterface
     {
         $this->logger->debug('Sending API-Request to get all actions');
 
-        $request = new Request('GET','actions');
+        $request = new Request('GET', 'actions');
         $httpResponse = $this->processRequest($request);
 
         $this->logger->debug('Response for all actions request', ['body' => $httpResponse->getBody()]);
 
         /** @var GetAllResponse $getAllResponse */
-        $getAllResponse = $this->serializer->deserialize($httpResponse->getBody(), GetAllResponse::class, static::FORMAT);
+        $getAllResponse = $this->serializer->deserialize($httpResponse->getBody(), GetAllResponse::class,
+            static::FORMAT);
 
         return $getAllResponse;
     }
 
     /**
-     * @inheritdoc
+     * @param RequestInterface $request
+     * @return \Psr\Http\Message\ResponseInterface
+     * @throws \Webfoersterei\HetznerCloudApiClient\Exception\ApiException
+     * @throws GuzzleException
      */
-    public function getAction($id): GetResponse
+    private function processRequest(RequestInterface $request): ResponseInterface
     {
-        $this->logger->debug('Sending API-Request to get a single action', ['action_id' => $id]);
+        try {
+            return $this->httpClient->send($request);
+        } catch (ClientException $clientException) {
+            $response = $clientException->getResponse();
+            if ($response !== null) {
+                $exception = $this->createExceptionByResponse($response);
+            } else {
+                $exception = new ApiException($clientException->getMessage(), $clientException->getCode(),
+                    $clientException);
+            }
 
-        $request = new Request('GET', sprintf('actions/%d', $id));
-        $httpResponse = $this->processRequest($request);
+            $exception->setRequest($clientException->getRequest())
+                ->setResponse($clientException->getResponse());
+            throw $exception;
+        }
 
-        $this->logger->debug('Response for single action request', ['body' => $httpResponse->getBody()]);
-
-        /** @var GetResponse $getResponse */
-        $getResponse = $this->serializer->deserialize($httpResponse->getBody(), GetResponse::class, static::FORMAT);
-
-        return $getResponse;
     }
 
     /**
@@ -97,27 +107,42 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param RequestInterface $request
-     * @return \Psr\Http\Message\ResponseInterface
-     * @throws \Webfoersterei\HetznerCloudApiClient\Exception\ApiException
-     * @throws GuzzleException
+     * @inheritDoc
      */
-    private function processRequest(RequestInterface $request): ResponseInterface
+    public function getAction($id): GetResponse
     {
-        try {
-            return $this->httpClient->send($request);
-        } catch (ClientException $clientException) {
-            $response = $clientException->getResponse();
-            if ($response !== null) {
-                $exception = $this->createExceptionByResponse($response);
-            } else {
-                $exception = new ApiException($clientException->getMessage(), $clientException->getCode(), $clientException);
-            }
+        $this->logger->debug('Sending API-Request to get a single action', ['action_id' => $id]);
 
-            $exception->setRequest($clientException->getRequest())
-                ->setResponse($clientException->getResponse());
-            throw $exception;
-        }
+        $request = new Request('GET', sprintf('actions/%d', $id));
+        $httpResponse = $this->processRequest($request);
 
+        $this->logger->debug('Response for single action request', ['body' => $httpResponse->getBody()]);
+
+        /** @var GetResponse $getResponse */
+        $getResponse = $this->serializer->deserialize($httpResponse->getBody(), GetResponse::class, static::FORMAT);
+
+        return $getResponse;
     }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function getServers(): GetAllServersResponse
+    {
+        $this->logger->debug('Sending API-Request to get all servers');
+
+        $request = new Request('GET', 'servers');
+        $httpResponse = $this->processRequest($request);
+        
+        $this->logger->debug('Response for all servers request', ['body' => $httpResponse->getBody()]);
+
+        /** @var GetAllServersResponse $getResponse */
+        $getResponse = $this->serializer->deserialize($httpResponse->getBody(), GetAllServersResponse::class,
+            static::FORMAT);
+
+        return $getResponse;
+    }
+
+
 }

@@ -7,21 +7,27 @@
 namespace Webfoersterei\HetznerCloudApiClient;
 
 
-use Webfoersterei\HetznerCloudApiClient\Model\Action\GetAllResponse;
-use Webfoersterei\HetznerCloudApiClient\Model\Action\GetResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Action\GetAllResponse as GetAllActionsResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Action\GetResponse as GetActionResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\GetAllResponse as GetAllServersResponse;
 
 interface ClientInterface
 {
 
     /**
-     * @return GetAllResponse
+     * @return GetAllActionsResponse
      */
-    public function getActions(): GetAllResponse;
+    public function getActions(): GetAllActionsResponse;
 
     /**
      * @param int $id
-     * @return GetResponse
+     * @return GetActionResponse
      */
-    public function getAction($id): GetResponse;
+    public function getAction($id): GetActionResponse;
+
+    /**
+     * @return GetAllServersResponse
+     */
+    public function getServers(): GetAllServersResponse;
 
 }
