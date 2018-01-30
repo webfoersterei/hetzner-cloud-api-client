@@ -1,5 +1,6 @@
 vendor/
 composer.lock
+logs/
 
 # Created by https://www.gitignore.io/api/phpstorm+all
 
