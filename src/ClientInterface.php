@@ -10,6 +10,7 @@ namespace Webfoersterei\HetznerCloudApiClient;
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetAllResponse as GetAllActionsResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetResponse as GetActionResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetAllResponse as GetAllServersResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\GetResponse as GetServerResponse;
 
 interface ClientInterface
 {
@@ -23,11 +24,17 @@ interface ClientInterface
      * @param int $id
      * @return GetActionResponse
      */
-    public function getAction($id): GetActionResponse;
+    public function getAction(int $id): GetActionResponse;
 
     /**
      * @return GetAllServersResponse
      */
     public function getServers(): GetAllServersResponse;
+
+    /**
+     * @param int $id
+     * @return GetServerResponse
+     */
+    public function getServer(int $id): GetServerResponse;
 
 }

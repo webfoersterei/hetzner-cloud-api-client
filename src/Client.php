@@ -21,6 +21,7 @@ use Webfoersterei\HetznerCloudApiClient\Model\Action\GetAllResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\ErrorResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetAllResponse as GetAllServersResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\GetResponse as GetServerResponse;
 
 class Client implements ClientInterface
 {
@@ -109,7 +110,7 @@ class Client implements ClientInterface
     /**
      * @inheritDoc
      */
-    public function getAction($id): GetResponse
+    public function getAction(int $id): GetResponse
     {
         $this->logger->debug('Sending API-Request to get a single action', ['action_id' => $id]);
 
@@ -134,11 +135,30 @@ class Client implements ClientInterface
 
         $request = new Request('GET', 'servers');
         $httpResponse = $this->processRequest($request);
-        
+
         $this->logger->debug('Response for all servers request', ['body' => $httpResponse->getBody()]);
 
         /** @var GetAllServersResponse $getResponse */
         $getResponse = $this->serializer->deserialize($httpResponse->getBody(), GetAllServersResponse::class,
+            static::FORMAT);
+
+        return $getResponse;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getServer(int $id): GetServerResponse
+    {
+        $this->logger->debug('Sending API-Request to ge a single server', ['server_id' => $id]);
+
+        $request = new Request('GET', sprintf('servers/%d', $id));
+        $httpResponse = $this->processRequest($request);
+
+        $this->logger->debug('Response for single server request', ['body' => $httpResponse->getBody()]);
+
+        /** @var GetServerResponse $getResponse */
+        $getResponse = $this->serializer->deserialize($httpResponse->getBody(), GetServerResponse::class,
             static::FORMAT);
 
         return $getResponse;
