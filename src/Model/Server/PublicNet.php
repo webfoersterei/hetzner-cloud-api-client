@@ -20,4 +20,9 @@ class PublicNet
      */
     public $ipv6;
 
+    /**
+     * @var int[]
+     */
+    public $floating_ips;
+
 }

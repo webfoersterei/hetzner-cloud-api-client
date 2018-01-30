@@ -35,11 +35,6 @@ class Server
     public $public_net;
 
     /**
-     * @var int[]|null
-     */
-    public $floating_ips;
-
-    /**
      * @var ServerType
      */
     public $server_type;

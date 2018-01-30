@@ -65,6 +65,11 @@ class Image
     public $os_flavor;
 
     /**
+     * @var string|null
+     */
+    public $os_version;
+
+    /**
      * @var bool
      */
     public $rapid_deploy;

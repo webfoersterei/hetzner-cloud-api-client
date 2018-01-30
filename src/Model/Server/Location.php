@@ -1,13 +1,13 @@
 <?php
 /**
  * @author Timo Förster <tfoerster@webfoersterei.de>
- * @date 25.01.18
+ * @date 30.01.18
  */
 
 namespace Webfoersterei\HetznerCloudApiClient\Model\Server;
 
 
-class Datacenter
+class Location
 {
 
     /**
@@ -26,7 +26,23 @@ class Datacenter
     public $description;
 
     /**
-     * @var Location
+     * @var string
      */
-    public $location;
+    public $country;
+
+    /**
+     * @var string
+     */
+    public $city;
+
+    /**
+     * @var float
+     */
+    public $latitude;
+
+    /**
+     * @var float
+     */
+    public $longitude;
+
 }
