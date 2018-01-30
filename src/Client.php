@@ -20,6 +20,8 @@ use Webfoersterei\HetznerCloudApiClient\Exception\ErrorResponseException;
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetAllResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\ErrorResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateRequest;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetAllResponse as GetAllServersResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetResponse as GetServerResponse;
 
@@ -86,7 +88,7 @@ class Client implements ClientInterface
             }
 
             $exception->setRequest($clientException->getRequest())
-                ->setResponse($clientException->getResponse());
+                ->setResponse($response);
             throw $exception;
         }
 
@@ -150,7 +152,7 @@ class Client implements ClientInterface
      */
     public function getServer(int $id): GetServerResponse
     {
-        $this->logger->debug('Sending API-Request to ge a single server', ['server_id' => $id]);
+        $this->logger->debug('Sending API-Request to get a single server', ['server_id' => $id]);
 
         $request = new Request('GET', sprintf('servers/%d', $id));
         $httpResponse = $this->processRequest($request);
@@ -164,5 +166,24 @@ class Client implements ClientInterface
         return $getResponse;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function createServer(CreateRequest $createRequest): CreateResponse
+    {
+        $requestBody = $this->serializer->serialize($createRequest, static::FORMAT);
+
+        $request = new Request('POST', 'servers', ['Content-Type' => 'application/json'], $requestBody);
+        $this->logger->debug('Sending API-Request to create a server', ['body' => $request->getBody()]);
+        $httpResponse = $this->processRequest($request);
+
+        $this->logger->debug('Response for create server request', ['body' => $httpResponse->getBody()]);
+
+        /** @var CreateResponse $createResponse */
+        $createResponse = $this->serializer->deserialize($httpResponse->getBody(), CreateResponse::class,
+            static::FORMAT);
+
+        return $createResponse;
+    }
 
 }

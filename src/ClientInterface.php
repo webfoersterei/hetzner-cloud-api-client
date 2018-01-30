@@ -9,6 +9,8 @@ namespace Webfoersterei\HetznerCloudApiClient;
 
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetAllResponse as GetAllActionsResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetResponse as GetActionResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateRequest;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetAllResponse as GetAllServersResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetResponse as GetServerResponse;
 
@@ -36,5 +38,11 @@ interface ClientInterface
      * @return GetServerResponse
      */
     public function getServer(int $id): GetServerResponse;
+
+    /**
+     * @param CreateRequest $createRequest
+     * @return CreateResponse
+     */
+    public function createServer(CreateRequest $createRequest): CreateResponse;
 
 }

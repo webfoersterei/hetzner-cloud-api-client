@@ -7,6 +7,8 @@
 namespace Webfoersterei\HetznerCloudApiClient\Model\Action;
 
 
+use Webfoersterei\HetznerCloudApiClient\Model\Error;
+
 class Action
 {
     /**
@@ -18,20 +20,34 @@ class Action
      * @var string
      */
     public $command;
+
     /**
      * @var string
      */
     public $status;
+
     /**
      * @var int
      */
     public $progress;
+
     /**
      * @var \DateTime
      */
     public $started;
+
     /**
      * @var \DateTime|null
      */
     public $finished;
+
+    /**
+     * @var array|null
+     */
+    public $resources;
+
+    /**
+     * @var Error|null
+     */
+    public $error;
 }
