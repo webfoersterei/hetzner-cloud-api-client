@@ -16,7 +16,7 @@ define('API_KEY', 'MYSECRETAPIKEY'); # See https://docs.hetzner.cloud/#header-au
 $cloudApiClient = Webfoersterei\HetznerCloudApiClient\ClientFactory::create(API_KEY);
 
 # You can now use the cloudApiClient. E.g:
-$cloudApiClient->actionsGetAll();
+$cloudApiClient->getServers();
 ```
 
 ## Contribute
