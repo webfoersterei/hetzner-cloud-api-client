@@ -22,6 +22,7 @@ use Webfoersterei\HetznerCloudApiClient\Model\Action\GetResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\ErrorResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateRequest;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\DeleteResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetAllResponse as GetAllServersResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetResponse as GetServerResponse;
 
@@ -185,5 +186,24 @@ class Client implements ClientInterface
 
         return $createResponse;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function deleteServer(int $id): DeleteResponse
+    {
+        $request = new Request('DELETE', sprintf('servers/%d', $id));
+        $this->logger->debug('Sending API-Request to delete a server', ['body' => $request->getBody()]);
+        $httpResponse = $this->processRequest($request);
+
+        $this->logger->debug('Response for delete server request', ['body' => $httpResponse->getBody()]);
+
+        /** @var DeleteResponse $deleteResponse */
+        $deleteResponse = $this->serializer->deserialize($httpResponse->getBody(), DeleteResponse::class,
+            static::FORMAT);
+
+        return $deleteResponse;
+    }
+
 
 }

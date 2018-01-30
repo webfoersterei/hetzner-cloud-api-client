@@ -11,6 +11,7 @@ use Webfoersterei\HetznerCloudApiClient\Model\Action\GetAllResponse as GetAllAct
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetResponse as GetActionResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateRequest;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\DeleteResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetAllResponse as GetAllServersResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetResponse as GetServerResponse;
 
@@ -44,5 +45,11 @@ interface ClientInterface
      * @return CreateResponse
      */
     public function createServer(CreateRequest $createRequest): CreateResponse;
+
+    /**
+     * @param int $id
+     * @return DeleteResponse
+     */
+    public function deleteServer(int $id): DeleteResponse;
 
 }
