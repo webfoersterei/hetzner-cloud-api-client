@@ -13,6 +13,7 @@ use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateRequest;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\DeleteResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetAllResponse as GetAllServersResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\GetAllTypesResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetResponse as GetServerResponse;
 
 interface ClientInterface
@@ -51,5 +52,10 @@ interface ClientInterface
      * @return DeleteResponse
      */
     public function deleteServer(int $id): DeleteResponse;
+
+    /**
+     * @return GetAllTypesResponse
+     */
+    public function getServerTypes(): GetAllTypesResponse;
 
 }

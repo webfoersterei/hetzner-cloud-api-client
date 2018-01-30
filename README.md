@@ -36,11 +36,31 @@ See: https://docs.hetzner.cloud/#resources-servers
 * Create one: `createServer(CreateRequest $createRequest)`
 * Delete one: `deleteServer(int $id)`
 
+### ServerTypes
+See: https://docs.hetzner.cloud/#resources-server-types
+* Get all: `getServerTypes()`
+
 ## Contribute
 
 Feel free to contribute to this github repository by reporting bugs and ideas to improve this API-client.
 
 ## Examples
+
+### List of serverTypes
+Lists all serverTypes: name and specs
+```php
+# Require vendors/autoload.php here
+
+define('API_KEY', 'MYSECRETAPIKEY');
+$client = \Webfoersterei\HetznerCloudApiClient\ClientFactory::create(API_KEY);
+
+$serverTypes = $client->getServerTypes();
+
+foreach ($serverTypes->server_types as $serverType) {
+    printf("%--12s CPU: %2d Cores, RAM: %3d GB, Storage: %4d GB (%s)\n", $serverType->name, $serverType->cores,
+        $serverType->memory, $serverType->disk, $serverType->storage_type);
+}
+```
 
 ### My first server
 Create a new server and delete it after started
