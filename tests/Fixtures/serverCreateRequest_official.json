@@ -1,0 +1,10 @@
+{
+  "name": "my-server",
+  "server_type": "cx11",
+  "start_after_create": true,
+  "image": "ubuntu16.04-standard-x64",
+  "ssh_keys": [
+    2323
+  ],
+  "user_data": "``"
+}

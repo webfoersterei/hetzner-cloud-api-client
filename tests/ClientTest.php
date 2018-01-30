@@ -6,6 +6,7 @@
 
 namespace Webfoersterei\HetznerCloudApiClient\Tests;
 
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use function GuzzleHttp\Psr7\stream_for;
 use PHPUnit\Framework\TestCase;
@@ -13,10 +14,10 @@ use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Webfoersterei\HetznerCloudApiClient\Client;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\CreatedFrom;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateRequest;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\Datacenter;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetAllResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\Image;
@@ -30,14 +31,64 @@ use Webfoersterei\HetznerCloudApiClient\Model\Server\Ptr;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\PublicNet;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\Server;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\ServerType;
+use Webfoersterei\HetznerCloudApiClient\Normalizer\OmitNullObjectNormalizer;
 
 class ClientTest extends TestCase
 {
 
-    public function testClientServerGetAll()
+    public function testClientValidServerCreateSerialization()
     {
-        $responseContent = stream_for(file_get_contents(__DIR__.'/Fixtures/serversGetAll_official.json'));
+        $responseContent = stream_for(file_get_contents(__DIR__.'/Fixtures/serverCreateResponse_official.json'));
         $fakeResponse = new Response(200, ['Content-Type' => 'application/json'], $responseContent);
+
+        $httpClient = $this->createGuzzleMock();
+        $httpClient->expects($this->once())
+            ->method('send')
+            ->with($this->callback(function (Request $request) {
+                $this->assertJsonStringEqualsJsonFile(__DIR__.'/Fixtures/serverCreateRequest_official.json',
+                    $request->getBody()->getContents());
+
+                return true;
+            }))
+            ->willReturn($fakeResponse);
+
+        $createServerRequest = new CreateRequest();
+        $createServerRequest->name = 'my-server';
+        $createServerRequest->server_type = 'cx11';
+        $createServerRequest->start_after_create = true;
+        $createServerRequest->image = 'ubuntu16.04-standard-x64';
+        $createServerRequest->ssh_keys = [2323];
+        $createServerRequest->user_data = '``';
+
+        $serializer = self::createSerializer();
+        $client = new Client($serializer, $httpClient);
+
+        $client->createServer($createServerRequest);
+    }
+
+    /**
+     * @return \PHPUnit\Framework\MockObject\MockObject|\GuzzleHttp\Client
+     */
+    private function createGuzzleMock()
+    {
+        return $this->getMockBuilder(\GuzzleHttp\Client::class)->disableOriginalConstructor()
+            ->setMethods(['send'])
+            ->getMock();
+    }
+
+    private static function createSerializer()
+    {
+        $objectNormalizer = new OmitNullObjectNormalizer(null, null, null, new PhpDocExtractor());
+        $normalizers = [new DateTimeNormalizer(), new ArrayDenormalizer(), $objectNormalizer];
+        $encoders = [new JsonEncoder()];
+
+        return new Serializer($normalizers, $encoders);
+    }
+
+    public function testClientValidServerGetAllDeserialization()
+    {
+        $expectedResponseContent = stream_for(file_get_contents(__DIR__.'/Fixtures/serversGetAll_official.json'));
+        $fakeResponse = new Response(200, ['Content-Type' => 'application/json'], $expectedResponseContent);
         $httpClient = $this->createGuzzleMock();
         $httpClient->expects($this->once())->method('send')->willReturn($fakeResponse);
 
@@ -125,25 +176,6 @@ class ClientTest extends TestCase
         $actualServerAllResponse = $client->getServers();
 
         $this->assertEquals($expectedServerAllResponse, $actualServerAllResponse);
-    }
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\GuzzleHttp\Client
-     */
-    private function createGuzzleMock()
-    {
-        return $this->getMockBuilder(\GuzzleHttp\Client::class)->disableOriginalConstructor()
-            ->setMethods(['send'])
-            ->getMock();
-    }
-
-    private static function createSerializer()
-    {
-        $objectNormalizer = new ObjectNormalizer(null, null, null, new PhpDocExtractor());
-        $normalizers = [new DateTimeNormalizer(), new ArrayDenormalizer(), $objectNormalizer];
-        $encoders = [new JsonEncoder()];
-
-        return new Serializer($normalizers, $encoders);
     }
 
 }
