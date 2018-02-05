@@ -26,6 +26,7 @@ use Webfoersterei\HetznerCloudApiClient\Model\Server\DeleteResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetAllResponse as GetAllServersResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetAllTypesResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\GetResponse as GetServerResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\GetTypeResponse;
 
 class Client implements ClientInterface
 {
@@ -224,5 +225,25 @@ class Client implements ClientInterface
 
         return $getResponse;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getServerType(int $id): GetTypeResponse
+    {
+        $this->logger->debug('Sending API-Request to get a serverType', ['serverType_id' => $id]);
+
+        $request = new Request('GET', sprintf('server_types/%d', $id));
+        $httpResponse = $this->processRequest($request);
+
+        $this->logger->debug('Response for single serverType request', ['body' => $httpResponse->getBody()]);
+
+        /** @var GetTypeResponse $getResponse */
+        $getResponse = $this->serializer->deserialize($httpResponse->getBody(), GetTypeResponse::class,
+            static::FORMAT);
+
+        return $getResponse;
+    }
+
 
 }
