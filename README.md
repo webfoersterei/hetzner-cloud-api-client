@@ -13,7 +13,7 @@ Install this package via composer ``composer install webfoersterei/hetzner-cloud
 **Note:** There is no stable release at the moment
 
 After that you can use the client like this:
-```
+```php
 define('API_KEY', 'MYSECRETAPIKEY'); # See https://docs.hetzner.cloud/#header-authentication-1
 $cloudApiClient = Webfoersterei\HetznerCloudApiClient\ClientFactory::create(API_KEY);
 
