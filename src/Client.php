@@ -20,6 +20,7 @@ use Webfoersterei\HetznerCloudApiClient\Exception\ErrorResponseException;
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetAllResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\ErrorResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\ChangeNameResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateRequest;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\DeleteResponse;
@@ -245,5 +246,25 @@ class Client implements ClientInterface
         return $getResponse;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function changeServerName(int $id, string $name): ChangeNameResponse
+    {
+        $requestBody = $this->serializer->serialize(['name' => $name], static::FORMAT);
+
+        $this->logger->debug('Sending API-Request to rename a server', ['server_id' => $id, 'new_name' => $name]);
+
+        $request = new Request('PUT', sprintf('servers/%d', $id), ['Content-Type' => 'application/json'], $requestBody);
+        $httpResponse = $this->processRequest($request);
+
+        $this->logger->debug('Response for rename server request', ['body' => $httpResponse->getBody()]);
+
+        /** @var ChangeNameResponse $changeNameResponse */
+        $changeNameResponse = $this->serializer->deserialize($httpResponse->getBody(), ChangeNameResponse::class,
+            static::FORMAT);
+
+        return $changeNameResponse;
+    }
 
 }

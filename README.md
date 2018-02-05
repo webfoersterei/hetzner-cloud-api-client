@@ -34,11 +34,13 @@ See: https://docs.hetzner.cloud/#resources-servers
 * Get all: `getServers()`
 * Get one: `getServer(int $id)`
 * Create one: `createServer(CreateRequest $createRequest)`
+* Rename: `changeServerName(int $id, string $name)`
 * Delete one: `deleteServer(int $id)`
 
 ### ServerTypes
 See: https://docs.hetzner.cloud/#resources-server-types
 * Get all: `getServerTypes()`
+* Get one: `getServerType(int $id)`
 
 ## Contribute
 

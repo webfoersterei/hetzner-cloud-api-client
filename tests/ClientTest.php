@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Webfoersterei\HetznerCloudApiClient\Client;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\ChangeNameResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\CreatedFrom;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateRequest;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\Datacenter;
@@ -83,6 +84,29 @@ class ClientTest extends TestCase
         $encoders = [new JsonEncoder()];
 
         return new Serializer($normalizers, $encoders);
+    }
+
+    public function testClientValidServerRenameSerialization()
+    {
+        $responseContent = stream_for(file_get_contents(__DIR__.'/Fixtures/serverRenameResponse_official.json'));
+        $fakeResponse = new Response(200, ['Content-Type' => 'application/json'], $responseContent);
+
+        $httpClient = $this->createGuzzleMock();
+        $httpClient->expects($this->once())
+            ->method('send')
+            ->with($this->callback(function (Request $request) {
+                $this->assertJsonStringEqualsJsonFile(__DIR__.'/Fixtures/serverRenameRequest_official.json',
+                    $request->getBody()->getContents());
+
+                return true;
+            }))
+            ->willReturn($fakeResponse);
+
+        $serializer = self::createSerializer();
+        $client = new Client($serializer, $httpClient);
+
+        $changeNameResponse = $client->changeServerName(1337, 'new-name');
+        $this->assertInstanceOf(ChangeNameResponse::class, $changeNameResponse);
     }
 
     public function testClientValidServerGetAllDeserialization()

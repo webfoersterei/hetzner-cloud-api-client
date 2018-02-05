@@ -9,6 +9,7 @@ namespace Webfoersterei\HetznerCloudApiClient;
 
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetAllResponse as GetAllActionsResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetResponse as GetActionResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Server\ChangeNameResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateRequest;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\DeleteResponse;
@@ -64,4 +65,11 @@ interface ClientInterface
      * @return GetTypeResponse
      */
     public function getServerType(int $id): GetTypeResponse;
+
+    /**
+     * @param int $id
+     * @param string $name
+     * @return ChangeNameResponse
+     */
+    public function changeServerName(int $id, string $name): ChangeNameResponse;
 }
