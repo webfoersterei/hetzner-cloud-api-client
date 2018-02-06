@@ -4,10 +4,10 @@
  * @date 25.01.18
  */
 
-namespace Webfoersterei\HetznerCloudApiClient\Model\Server;
+namespace Webfoersterei\HetznerCloudApiClient\Model;
 
 
-class Price
+class ServerTypePrice
 {
     /**
      * @var string

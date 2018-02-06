@@ -42,6 +42,10 @@ See: https://docs.hetzner.cloud/#resources-server-types
 * Get all: `getServerTypes()`
 * Get one: `getServerType(int $id)`
 
+### Pricing
+See: https://docs.hetzner.cloud/#resources-pricing-get
+* Get all: `getPricing()`
+
 ## Contribute
 
 Feel free to contribute to this github repository by reporting bugs and ideas to improve this API-client.

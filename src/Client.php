@@ -20,6 +20,7 @@ use Webfoersterei\HetznerCloudApiClient\Exception\ErrorResponseException;
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetAllResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Action\GetResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\ErrorResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Pricing\GetResponse as GetPriceResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\ChangeNameResponse;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateRequest;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\CreateResponse;
@@ -267,4 +268,22 @@ class Client implements ClientInterface
         return $changeNameResponse;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function getPricing(): GetPriceResponse
+    {
+        $this->logger->debug('Sending API-Request to get pricing');
+
+        $request = new Request('GET', 'pricing');
+        $httpResponse = $this->processRequest($request);
+
+        $this->logger->debug('Response for pricing request', ['body' => $httpResponse->getBody()]);
+
+        /** @var GetPriceResponse $getResponse */
+        $getResponse = $this->serializer->deserialize($httpResponse->getBody(), GetPriceResponse::class,
+            static::FORMAT);
+
+        return $getResponse;
+    }
 }

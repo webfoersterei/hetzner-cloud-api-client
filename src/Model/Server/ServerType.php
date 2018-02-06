@@ -7,6 +7,8 @@
 namespace Webfoersterei\HetznerCloudApiClient\Model\Server;
 
 
+use Webfoersterei\HetznerCloudApiClient\Model\ServerTypePrice;
+
 class ServerType
 {
     /**
@@ -40,7 +42,7 @@ class ServerType
     public $disk;
 
     /**
-     * @var Price[]
+     * @var ServerTypePrice[]
      */
     public $prices;
 
