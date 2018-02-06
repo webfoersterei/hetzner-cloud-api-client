@@ -16,6 +16,13 @@ use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Webfoersterei\HetznerCloudApiClient\Client;
+use Webfoersterei\HetznerCloudApiClient\Model\Pricing\FloatingIp;
+use Webfoersterei\HetznerCloudApiClient\Model\Pricing\GetResponse;
+use Webfoersterei\HetznerCloudApiClient\Model\Pricing\Image as PricingImage;
+use Webfoersterei\HetznerCloudApiClient\Model\Pricing\Pricing;
+use Webfoersterei\HetznerCloudApiClient\Model\Pricing\ServerBackup;
+use Webfoersterei\HetznerCloudApiClient\Model\Pricing\ServerType as PricingServerType;
+use Webfoersterei\HetznerCloudApiClient\Model\Pricing\Traffic;
 use Webfoersterei\HetznerCloudApiClient\Model\ServerTypePrice;
 use Webfoersterei\HetznerCloudApiClient\Model\PriceDetail;
 use Webfoersterei\HetznerCloudApiClient\Model\Server\ChangeNameResponse;
@@ -84,6 +91,66 @@ class ClientTest extends TestCase
         $encoders = [new JsonEncoder()];
 
         return new Serializer($normalizers, $encoders);
+    }
+
+    public function testClientValidPricingDeserialization()
+    {
+        $responseContent = stream_for(file_get_contents(__DIR__.'/Fixtures/pricingGetAllResponse_official.json'));
+        $fakeResponse = new Response(200, ['Content-Type' => 'application/json'], $responseContent);
+
+        $httpClient = $this->createGuzzleMock();
+        $httpClient->expects($this->once())
+            ->method('send')
+            ->willReturn($fakeResponse);
+
+        $serializer = self::createSerializer();
+        $client = new Client($serializer, $httpClient);
+
+        $expectedPricingResponse = new GetResponse();
+
+        $expectedPricingResponse->pricing = new Pricing();
+        $expectedPricingResponse->pricing->currency = 'EUR';
+        $expectedPricingResponse->pricing->vat_rate = 19;
+
+        $image = new PricingImage();
+        $image->price_per_gb_month = new PriceDetail();
+        $image->price_per_gb_month->net = 1;
+        $image->price_per_gb_month->gross = 1.19;
+        $expectedPricingResponse->pricing->image = $image;
+
+        $floatingIp = new FloatingIp();
+        $floatingIp->price_monthly = new PriceDetail();
+        $floatingIp->price_monthly->net = 1;
+        $floatingIp->price_monthly->gross = 1.19;
+        $expectedPricingResponse->pricing->floating_ip = $floatingIp;
+
+        $traffic = new Traffic();
+        $traffic->price_per_tb = new PriceDetail();
+        $traffic->price_per_tb->net = 1;
+        $traffic->price_per_tb->gross = 1.19;
+        $expectedPricingResponse->pricing->traffic = $traffic;
+
+        $serverBackup = new ServerBackup();
+        $serverBackup->percentage = 20;
+        $expectedPricingResponse->pricing->server_backup = $serverBackup;
+
+        $serverType = new PricingServerType();
+        $serverType->id = 4;
+        $serverType->name = 'CX11';
+        $serverTypePrice = new ServerTypePrice();
+        $serverTypePrice->location = 'fsn1';
+        $serverTypePrice->price_hourly = new PriceDetail();
+        $serverTypePrice->price_hourly->net = 1;
+        $serverTypePrice->price_hourly->gross = 1.19;
+        $serverTypePrice->price_monthly = new PriceDetail();
+        $serverTypePrice->price_monthly->net = 1;
+        $serverTypePrice->price_monthly->gross = 1.19;
+        $serverType->prices = [$serverTypePrice];
+        $expectedPricingResponse->pricing->server_types = [$serverType];
+
+        $actualPricingResponse = $client->getPricing();
+
+        $this->assertEquals($expectedPricingResponse, $actualPricingResponse);
     }
 
     public function testClientValidServerRenameSerialization()

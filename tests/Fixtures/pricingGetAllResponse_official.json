@@ -1,0 +1,46 @@
+{
+  "pricing": {
+    "currency": "EUR",
+    "vat_rate": "19.00",
+    "image": {
+      "price_per_gb_month": {
+        "net": "1",
+        "gross": "1.19"
+      }
+    },
+    "floating_ip": {
+      "price_monthly": {
+        "net": "1",
+        "gross": "1.19"
+      }
+    },
+    "traffic": {
+      "price_per_tb": {
+        "net": "1",
+        "gross": "1.19"
+      }
+    },
+    "server_backup": {
+      "percentage": "20"
+    },
+    "server_types": [
+      {
+        "id": 4,
+        "name": "CX11",
+        "prices": [
+          {
+            "location": "fsn1",
+            "price_hourly": {
+              "net": "1",
+              "gross": "1.19"
+            },
+            "price_monthly": {
+              "net": "1",
+              "gross": "1.19"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
