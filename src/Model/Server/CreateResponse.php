@@ -18,7 +18,7 @@ class CreateResponse extends GetResponse
     public $action;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $root_password;
 

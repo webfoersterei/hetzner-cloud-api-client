@@ -8,7 +8,7 @@ API Client for managing Hetzner's Cloud
 
 ## Usage
 
-Install this package via composer ``composer install webfoersterei/hetzner-cloud-api-client``
+Install this package via composer ``composer require webfoersterei/hetzner-cloud-api-client "dev-master@dev"``
 
 **Note:** There is no stable release at the moment
 
