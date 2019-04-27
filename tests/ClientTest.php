@@ -64,9 +64,12 @@ class ClientTest extends TestCase
         $createServerRequest->name = 'my-server';
         $createServerRequest->server_type = 'cx11';
         $createServerRequest->start_after_create = true;
-        $createServerRequest->image = 'ubuntu16.04-standard-x64';
-        $createServerRequest->ssh_keys = [2323];
-        $createServerRequest->user_data = '``';
+        $createServerRequest->location = 'nbg1';
+        $createServerRequest->image = 'ubuntu-16.04';
+        $createServerRequest->ssh_keys = ['my-ssh-key'];
+        $createServerRequest->user_data = "#cloud-config\nruncmd:\n- [touch, /root/cloud-init-worked]\n";
+        $createServerRequest->automount = false;
+        $createServerRequest->volumes = [1];
 
         $serializer = self::createSerializer();
         $client = new Client($serializer, $httpClient);
@@ -188,7 +191,7 @@ class ClientTest extends TestCase
 
         $server1 = new Server();
         $server1->id = 42;
-        $server1->name = 'my_server01';
+        $server1->name = 'my-server';
         $server1->status = 'running';
         $server1->created = new \DateTime('2016-01-30T23:50+00:00');
         $server1->public_net = new PublicNet();
@@ -235,17 +238,17 @@ class ClientTest extends TestCase
         $server1->datacenter->location->longitude = 12.370071;
         $server1->image = new Image();
         $server1->image->id = 4711;
-        $server1->image->type = 'system';
+        $server1->image->type = 'snapshot';
         $server1->image->status = 'available';
-        $server1->image->name = 'ubuntu16.04-standard-x64';
+        $server1->image->name = 'ubuntu-16.04';
         $server1->image->description = 'Ubuntu 16.04 Standard 64 bit';
         $server1->image->image_size = 2.3;
-        $server1->image->disk_size = 10;
+        $server1->image->disk_size = 10.0;
         $server1->image->created = new \DateTime('2016-01-30T23:50+00:00');
         $server1->image->created_from = new CreatedFrom();
         $server1->image->created_from->id = 1;
         $server1->image->created_from->name = 'Server';
-        $server1->image->bound_to = 1;
+        $server1->image->bound_to = null;
         $server1->image->os_flavor = 'ubuntu';
         $server1->image->os_version = '16.04';
         $server1->image->rapid_deploy = false;

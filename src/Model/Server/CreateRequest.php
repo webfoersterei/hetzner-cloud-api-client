@@ -44,7 +44,7 @@ class CreateRequest
     public $image;
 
     /**
-     * @var int[]|null
+     * @var string[]|null
      */
     public $ssh_keys;
 
@@ -52,4 +52,14 @@ class CreateRequest
      * @var string|null
      */
     public $user_data;
+
+    /**
+     * @var bool|null
+     */
+    public $automount;
+
+    /**
+     * @var int[]|null
+     */
+    public $volumes;
 }

@@ -1,10 +1,15 @@
 {
   "name": "my-server",
   "server_type": "cx11",
+  "location": "nbg1",
   "start_after_create": true,
-  "image": "ubuntu16.04-standard-x64",
+  "image": "ubuntu-16.04",
   "ssh_keys": [
-    2323
+    "my-ssh-key"
   ],
-  "user_data": "``"
+  "volumes": [
+    1
+  ],
+  "user_data": "#cloud-config\nruncmd:\n- [touch, /root/cloud-init-worked]\n",
+  "automount": false
 }

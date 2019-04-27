@@ -3,7 +3,7 @@
     "id": 42,
     "name": "my-server",
     "status": "initializing",
-    "created": "2016-01-30T23:50+00:00",
+    "created": "2016-01-30T23:50:00+00:00",
     "public_net": {
       "ipv4": {
         "ip": "1.2.3.4",
@@ -31,20 +31,22 @@
       "cores": 1,
       "memory": 1,
       "disk": 25,
+      "deprecated": true,
       "prices": [
         {
           "location": "fsn1",
           "price_hourly": {
-            "net": "1",
-            "gross": "1.19"
+            "net": "1.0000000000",
+            "gross": "1.1900000000000000"
           },
           "price_monthly": {
-            "net": "1",
-            "gross": "1.19"
+            "net": "1.0000000000",
+            "gross": "1.1900000000000000"
           }
         }
       ],
-      "storage_type": "local"
+      "storage_type": "local",
+      "cpu_type": "shared"
     },
     "datacenter": {
       "id": 1,
@@ -58,17 +60,34 @@
         "city": "Falkenstein",
         "latitude": 50.47612,
         "longitude": 12.370071
+      },
+      "server_types": {
+        "supported": [
+          1,
+          2,
+          3
+        ],
+        "available": [
+          1,
+          2,
+          3
+        ],
+        "available_for_migration": [
+          1,
+          2,
+          3
+        ]
       }
     },
     "image": {
       "id": 4711,
       "type": "snapshot",
       "status": "available",
-      "name": "ubuntu16.04-standard-x64",
+      "name": "ubuntu-16.04",
       "description": "Ubuntu 16.04 Standard 64 bit",
       "image_size": 2.3,
       "disk_size": 10,
-      "created": "2016-01-30T23:50+00:00",
+      "created": "2016-01-30T23:50:00+00:00",
       "created_from": {
         "id": 1,
         "name": "Server"
@@ -76,27 +95,39 @@
       "bound_to": null,
       "os_flavor": "ubuntu",
       "os_version": "16.04",
-      "rapid_deploy": false
+      "rapid_deploy": false,
+      "protection": {
+        "delete": false
+      },
+      "deprecated": "2018-02-28T00:00:00+00:00",
+      "labels": {}
     },
     "iso": {
       "id": 4711,
       "name": "FreeBSD-11.0-RELEASE-amd64-dvd1",
       "description": "FreeBSD 11.0 x64",
-      "type": "public"
+      "type": "public",
+      "deprecated": "2018-02-28T00:00:00+00:00"
     },
     "rescue_enabled": false,
     "locked": false,
     "backup_window": "22-02",
     "outgoing_traffic": 123456,
     "ingoing_traffic": 123456,
-    "included_traffic": 654321
+    "included_traffic": 654321,
+    "protection": {
+      "delete": false,
+      "rebuild": false
+    },
+    "labels": {},
+    "volumes": []
   },
   "action": {
-    "id": 1337,
+    "id": 1,
     "command": "create_server",
     "status": "running",
     "progress": 0,
-    "started": "2016-01-30T23:50+00:00",
+    "started": "2016-01-30T23:50:00+00:00",
     "finished": null,
     "resources": [
       {
@@ -109,5 +140,25 @@
       "message": "Action failed"
     }
   },
+  "next_actions": [
+    {
+      "id": 13,
+      "command": "start_server",
+      "status": "running",
+      "progress": 0,
+      "started": "2016-01-30T23:50:00+00:00",
+      "finished": null,
+      "resources": [
+        {
+          "id": 42,
+          "type": "server"
+        }
+      ],
+      "error": {
+        "code": "action_failed",
+        "message": "Action failed"
+      }
+    }
+  ],
   "root_password": "YItygq1v3GYjjMomLaKc"
 }

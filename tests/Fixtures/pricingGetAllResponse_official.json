@@ -1,27 +1,33 @@
 {
   "pricing": {
     "currency": "EUR",
-    "vat_rate": "19.00",
+    "vat_rate": "19.000000",
     "image": {
       "price_per_gb_month": {
-        "net": "1",
-        "gross": "1.19"
+        "net": "1.0000000000",
+        "gross": "1.1900000000000000"
       }
     },
     "floating_ip": {
       "price_monthly": {
-        "net": "1",
-        "gross": "1.19"
+        "net": "1.0000000000",
+        "gross": "1.1900000000000000"
       }
     },
     "traffic": {
       "price_per_tb": {
-        "net": "1",
-        "gross": "1.19"
+        "net": "1.0000000000",
+        "gross": "1.1900000000000000"
       }
     },
     "server_backup": {
-      "percentage": "20"
+      "percentage": "20.0000000000"
+    },
+    "volume": {
+      "price_per_gb_month": {
+        "net": "1.0000000000",
+        "gross": "1.1900000000000000"
+      }
     },
     "server_types": [
       {
@@ -31,12 +37,12 @@
           {
             "location": "fsn1",
             "price_hourly": {
-              "net": "1",
-              "gross": "1.19"
+              "net": "1.0000000000",
+              "gross": "1.1900000000000000"
             },
             "price_monthly": {
-              "net": "1",
-              "gross": "1.19"
+              "net": "1.0000000000",
+              "gross": "1.1900000000000000"
             }
           }
         ]
